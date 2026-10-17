@@ -113,4 +113,65 @@ def test_rota_sayaci():
     assert hasattr(bilgi, "misses")
 
 
+def test_istatistik_buyuk_harfler():
+    """Gezegen adlarinin buyuk harfe cevrilmesini iki yontemle test ediyoruz."""
+    from uzay_oyunu.galaksi import veri_yukle
+    from uzay_oyunu.istatistik import (
+        buyuk_harfli_gezegenler_comprehension,
+        buyuk_harfli_gezegenler_map,
+    )
+
+    g = veri_yukle()
+    sonuc_map = buyuk_harfli_gezegenler_map(g)
+    sonuc_comp = buyuk_harfli_gezegenler_comprehension(g)
+
+    assert sonuc_map == sonuc_comp
+    assert "DÜNYA" in sonuc_map
+    assert "SIRIUS" in sonuc_map
+
+
+def test_istatistik_baglanti_filtreleme():
+    """En az 2 baglantisi olan gezegenlerin filtrelenmesini test ediyoruz."""
+    from uzay_oyunu.galaksi import veri_yukle
+    from uzay_oyunu.istatistik import (
+        baglantisi_cok_olanlar_comprehension,
+        baglantisi_cok_olanlar_filter,
+    )
+
+    g = veri_yukle()
+    sonuc_filter = baglantisi_cok_olanlar_filter(g, 2)
+    sonuc_comp = baglantisi_cok_olanlar_comprehension(g, 2)
+
+    assert sonuc_filter == sonuc_comp
+    # kara delik haric diger 4 gezegenin baglantisi >= 2'dir
+    assert "kara_delik" not in sonuc_filter
+    assert "dünya" in sonuc_filter
+
+
+def test_istatistik_toplam_baglanti():
+    """Toplam baglanti sayisini reduce ve sum ile test ediyoruz."""
+    from uzay_oyunu.galaksi import veri_yukle
+    from uzay_oyunu.istatistik import (
+        toplam_baglanti_reduce,
+        toplam_baglanti_sum,
+    )
+
+    g = veri_yukle()
+    sonuc_reduce = toplam_baglanti_reduce(g)
+    sonuc_sum = toplam_baglanti_sum(g)
+
+    assert sonuc_reduce == sonuc_sum
+    assert sonuc_reduce == 11
+
+
+def test_hizli_yolculuk_partial():
+    """functools.partial ile turetilen hizli_yolculuk fonksiyonunu test ediyoruz."""
+    from uzay_oyunu.istatistik import hizli_yolculuk
+
+    assert hizli_yolculuk.keywords == {"hiz": 3}
+    # 90 birim mesafe hiz=3 ile 30 birim sure surer
+    assert hizli_yolculuk(90) == 30.0
+
+
+
 
