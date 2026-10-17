@@ -39,3 +39,23 @@ def test_fibonacci_tek_kullanimlik():
     assert ilk_bes == [0, 1, 1, 2, 3]
     assert ikinci_bes == [5, 8, 13, 21, 34]
     assert ilk_bes != ikinci_bes
+
+
+def test_yakit_gostergesi():
+    """PDF'teki ornek ciktinin dogrulugunu test ediyoruz: 100, 30 -> [70, 40, 10, 0]."""
+    from uzay_oyunu.akis import yakit_gostergesi
+
+    sonuc = list(yakit_gostergesi(100, 30))
+    assert sonuc == [70, 40, 10, 0]
+
+
+def test_yakit_gostergesi_stop_iteration():
+    """Yakit sifira ulastiginda StopIteration hatasi verdigini test ediyoruz."""
+    from uzay_oyunu.akis import yakit_gostergesi
+
+    g = yakit_gostergesi(20, 10)
+    assert next(g) == 10
+    assert next(g) == 0
+    with pytest.raises(StopIteration):
+        next(g)
+

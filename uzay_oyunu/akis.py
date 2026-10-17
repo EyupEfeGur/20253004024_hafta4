@@ -14,3 +14,16 @@ def fibonacci() -> Iterator[int]:
     while True:
         yield a
         a, b = b, a + b
+
+
+def yakit_gostergesi(yakit: int, tuketim: int) -> Iterator[int]:
+    """Her adımda yakıtı tüketim kadar azaltıp kalan miktarı üreten üreteç."""
+    kalan = yakit
+    while kalan > 0:
+        kalan -= tuketim
+        if kalan < 0:
+            kalan = 0
+        yield kalan
+        if kalan == 0:
+            break
+

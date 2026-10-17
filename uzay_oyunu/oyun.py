@@ -34,9 +34,11 @@ def travel():
     try:
         from uzay_oyunu.araclar import hamle_sayaci
         from uzay_oyunu.galaksi import veri_yukle
+        from uzay_oyunu.akis import yakit_gostergesi
     except ModuleNotFoundError:
         from araclar import hamle_sayaci
         from galaksi import veri_yukle
+        from akis import yakit_gostergesi
 
     galaksi = veri_yukle()
     if not galaksi:
@@ -51,6 +53,8 @@ def travel():
 
     planet = galaksi.get("konum", "dünya")
     yakit = galaksi.get("yakit", 100)
+    # Her yolculuk için gösterge üreteci oluşturuyoruz
+    gosterge = yakit_gostergesi(yakit, 5)
 
     while True:
         destinations = galaksi["baglantilar"].get(planet, [])
@@ -71,8 +75,12 @@ def travel():
             index = int(secim) - 1
             if 0 <= index < len(destinations):
                 planet = destinations[index]
-                yakit -= 10
                 toplam_hamle = sayac()
+                try:
+                    yakit = next(gosterge)
+                except StopIteration:
+                    print("Yakıtın bitti, uzayda sürükleniyorsun…")
+                    break
             else:
                 print("Geçersiz seçim!")
         except ValueError:
