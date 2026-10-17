@@ -7,6 +7,7 @@
 
 from collections.abc import Iterator
 from functools import lru_cache
+import time
 
 
 def fibonacci() -> Iterator[int]:
@@ -76,6 +77,17 @@ def rota_sayaci(baglantilar: dict):
         return sum(rota_sayisi(komsu, adim - 1) for komsu in komsu_listesi)
 
     return rota_sayisi
+
+
+def zamanlayici(aralik: float) -> Iterator[float]:
+    """Belirtilen saniye aralığında çalışan zamanlayıcı üreteci (meşgul bekleme)."""
+    sonraki = time.time() + aralik
+    while True:
+        simdi = time.time()
+        if simdi >= sonraki:
+            yield simdi
+            sonraki = simdi + aralik
+
 
 
 
