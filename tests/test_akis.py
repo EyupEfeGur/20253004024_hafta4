@@ -59,3 +59,34 @@ def test_yakit_gostergesi_stop_iteration():
     with pytest.raises(StopIteration):
         next(g)
 
+
+def test_seyir_defteri_toplam_yakit():
+    """Boru hattindan gecen yolculuklarin toplam yakitini test ediyoruz (88 olmali)."""
+    import os
+    from uzay_oyunu.akis import ayristir, satirlari_oku
+
+    dosya_yolu = os.path.join("veri", "seyir.txt")
+    toplam = sum(y for _, _, y in ayristir(satirlari_oku(dosya_yolu)))
+    assert toplam == 88
+
+
+def test_seyir_defteri_uzun_yolculuklar():
+    """Esik degeri 10'dan buyuk hedeflerin dogru suzuldugunu test ediyoruz."""
+    import os
+    from uzay_oyunu.akis import ayristir, satirlari_oku, uzun_yolculuklar
+
+    dosya_yolu = os.path.join("veri", "seyir.txt")
+    kayitlar = ayristir(satirlari_oku(dosya_yolu))
+    hedefler = [h for _, h, _ in uzun_yolculuklar(kayitlar, 10)]
+    assert hedefler == ["sirius", "centauri", "orion", "kara_delik"]
+
+
+def test_satirlari_oku_tembel():
+    """satirlari_oku fonksiyonunun liste degil bir uretec dondurdugunu test ediyoruz."""
+    import inspect
+    from uzay_oyunu.akis import satirlari_oku
+
+    g = satirlari_oku("veri/seyir.txt")
+    assert inspect.isgenerator(g)
+
+

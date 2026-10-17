@@ -27,3 +27,35 @@ def yakit_gostergesi(yakit: int, tuketim: int) -> Iterator[int]:
         if kalan == 0:
             break
 
+
+def satirlari_oku(yol: str) -> Iterator[str]:
+    """Dosyayı satır satır okur, boş ve # ile başlayan satırları atlar."""
+    with open(yol, "r", encoding="utf-8") as dosya:
+        for satir in dosya:
+            temiz = satir.strip()
+            # Boş veya yorum olan satırları atlıyoruz
+            if not temiz or temiz.startswith("#"):
+                continue
+            yield temiz
+
+
+def ayristir(satirlar: Iterator[str]) -> Iterator[tuple[str, str, int]]:
+    """Satırlardan (kaynak, hedef, yakit) şeklinde demet üretir."""
+    for satir in satirlar:
+        parcalar = satir.split()
+        kaynak = parcalar[0]
+        # parcalar[1] -> ok simgesi
+        hedef = parcalar[2]
+        yakit = int(parcalar[3])
+        yield (kaynak, hedef, yakit)
+
+
+def uzun_yolculuklar(
+    kayitlar: Iterator[tuple[str, str, int]], esik: int
+) -> Iterator[tuple[str, str, int]]:
+    """Yakıtı eşikten büyük olan yolculukları süzer."""
+    for kaynak, hedef, yakit in kayitlar:
+        if yakit > esik:
+            yield (kaynak, hedef, yakit)
+
+
