@@ -6,8 +6,6 @@
 # Bonus Görev - Meşgul Bekleme ve Zamanlayıcı
 
 import time
-from uzay_oyunu.akis import zamanlayici
-
 
 def tik_tak_calistir(toplam_sure: float = 10.0) -> None:
     """10 saniye boyunca her 2 saniyede 'tik', her 5 saniyede 'tak' yazdırır."""
@@ -30,18 +28,6 @@ def tik_tak_calistir(toplam_sure: float = 10.0) -> None:
     print("Zamanlayıcı tamamlandı.")
 
 
-# ==============================================================================
-# Açıklama:
-# 1. Neden bu bir "meşgul bekleme"dir (busy waiting)?
-#    Program while döngüsü içinde işlemciyi serbest bırakmadan sürekli olarak
-#    time.time() fonksiyonunu çağırır ve şartın sağlanıp sağlanmadığını denetler.
-#    Bu esnada işlemci çekirdeği %100 kapasiteyle boş döngü döndürür ve kaynak tüketir.
-#
-# 2. time.sleep ile farkı nedir?
-#    time.sleep() fonksiyonu kullanıldığında işlem işletim sistemi seviyesinde
-#    uyutulur (bloklanır). İşlemci bu süreçte hiçbir döngü harcamaz ve başka işlere
-#    odaklanır. Süre dolduğunda işletim sistemi işlemi tekrar uyandırır.
-# ==============================================================================
 
 
 if __name__ == "__main__":
