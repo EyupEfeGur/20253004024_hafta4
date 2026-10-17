@@ -90,3 +90,27 @@ def test_satirlari_oku_tembel():
     assert inspect.isgenerator(g)
 
 
+def test_rota_sayaci():
+    """Onbellekli rota sayaci fonksiyonunu ve cache_info ozelligini test ediyoruz."""
+    from uzay_oyunu.akis import rota_sayaci
+    from uzay_oyunu.galaksi import veri_yukle
+
+    g = veri_yukle()
+    say = rota_sayaci(g["baglantilar"])
+
+    # 0 adimda bulunulan yerde 1 rota vardir
+    assert say("dünya", 0) == 1
+    # 1 adimda dunya -> [centauri, sirius] = 2 rota
+    assert say("dünya", 1) == 2
+    # 3 adimda 15 rota
+    assert say("dünya", 3) == 15
+    # kara delikten baglanti olmadigi icin 0 rota
+    assert say("kara_delik", 1) == 0
+
+    # Onbellek (lru_cache) calisiyor mu kontrol ediyoruz
+    bilgi = say.cache_info()
+    assert hasattr(bilgi, "hits")
+    assert hasattr(bilgi, "misses")
+
+
+

@@ -6,6 +6,7 @@
 # Üreteçler ve veri işleme akışı
 
 from collections.abc import Iterator
+from functools import lru_cache
 
 
 def fibonacci() -> Iterator[int]:
@@ -57,5 +58,24 @@ def uzun_yolculuklar(
     for kaynak, hedef, yakit in kayitlar:
         if yakit > esik:
             yield (kaynak, hedef, yakit)
+
+
+def rota_sayaci(baglantilar: dict):
+    """Verilen bağlantı haritasına göre rota sayısını hesaplayan önbellekli fonksiyon döndürür."""
+
+    @lru_cache(maxsize=None)
+    def rota_sayisi(gezegen: str, adim: int) -> int:
+        """Verilen gezegenden başlayıp tam adim yolculuk yapan farklı rota sayısını hesaplar."""
+        if adim == 0:
+            return 1
+
+        komsu_listesi = baglantilar.get(gezegen, [])
+        if not komsu_listesi:
+            return 0
+
+        return sum(rota_sayisi(komsu, adim - 1) for komsu in komsu_listesi)
+
+    return rota_sayisi
+
 
 
